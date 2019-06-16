@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  db:
+    image: mysql:5.7        # latest => 5.7 にしたことで "http: panic serving 172.27.0.4:50906: dial tcp 172.27.0.2:3306: connect: connection refused" panicを解決できた
+    restart: always
+    volumes:
+      - ./mysql:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      MYSQL_DATABASE: test
+
+  web:
+    build: .
+    depends_on:
+      - db
+
+  proxy:
+    build: nginx/.
+    ports:
+      - 8000:80
+    depends_on:
+      - web
