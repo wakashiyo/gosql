@@ -49,7 +49,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, err.Error())
 		return
 	}
-	//?? affected
+	//RowsAffected : クエリが影響を与えた行数を返す
 	rowCnt, err := rlt.RowsAffected()
 	if err != nil {
 		fmt.Fprintf(w, err.Error())
