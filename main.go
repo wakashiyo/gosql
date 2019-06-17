@@ -36,7 +36,26 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, err.Error())
 		return
 	}
-	fmt.Fprintf(w, "result : %d", result)
+
+	//create(insert)
+	rlt, err := db.Exec("INSERT INTO users(user_id, name, email) VALUES(?, ?, ?)", "alskdfj987", "tarou tanaka", "taroutest@mail.com")
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+		return
+	}
+	//レコード登録後のIDの取得
+	lastid, err := rlt.LastInsertId()
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+		return
+	}
+	//?? affected
+	rowCnt, err := rlt.RowsAffected()
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+		return
+	}
+	fmt.Fprintf(w, "result : %d, lastID : %d, affected : %d", result, lastid, rowCnt)
 }
 
 func main() {
